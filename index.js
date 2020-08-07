@@ -3,7 +3,7 @@ const pdf = require("@touno-io/pdf");
 const express = require("express");
 var natural = require("natural");
 const app = express();
-const port = process.env.PORT || 3000;
+const port = 80;
 const GoogleImages = require("google-images");
 const nlp = require("compromise");
 var gis = require("g-i-s");
@@ -238,7 +238,7 @@ app.get("/", async (req, res) => {
     let image = await getKeyword("First President of Indonesia Soekarno");
     return res.json(image);
 });
-app.post("/", verifyJWT, upload_pdf.single("pdf"), async (req, res) => {
+app.post("/", upload_pdf.single("pdf"), async (req, res) => {
     if (req.file == undefined) {
         return res.status(403).json("Invalid extension and/or pdf required.");
     }
@@ -304,7 +304,7 @@ app.post("/", verifyJWT, upload_pdf.single("pdf"), async (req, res) => {
                 question: await get_question(sentence),
             });
         }
-
+        return res.json(data_result);
         let json = JSON.stringify(data_result);
 
         let formData = {
