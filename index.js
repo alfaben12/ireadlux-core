@@ -3,7 +3,7 @@ const pdf = require("@touno-io/pdf");
 const express = require("express");
 var natural = require("natural");
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 const GoogleImages = require("google-images");
 const nlp = require("compromise");
 var gis = require("g-i-s");
@@ -40,23 +40,20 @@ function getKeyword(query) {
     });
 }
 
-var storage_pdf = multer.diskStorage({
-    destination: "./uploads/",
-    filename: function (req, file, cb) {
-        cb(null, file.originalname);
-    },
-});
+var storage_pdf = multer.memoryStorage();
 
-var upload_pdf = multer({
-    storage: storage_pdf,
-    fileFilter: function (req, file, callback) {
-        var ext = path.extname(file.originalname);
-        if (ext !== ".pdf") {
-            return callback(null, false);
-        }
-        callback(null, true);
-    },
-});
+// var upload_pdf = multer({
+//     storage: storage_pdf,
+//     fileFilter: function (req, file, callback) {
+//         var ext = path.extname(file.originalname);
+//         if (ext !== ".pdf") {
+//             return callback(null, false);
+//         }
+//         callback(null, true);
+//     },
+// });
+
+const upload_pdf = multer()
 
 function shuffleArray(array) {
     var currentIndex = array.length,
@@ -243,10 +240,9 @@ app.post("/", verifyJWT, upload_pdf.single("pdf"), async (req, res) => {
         return res.status(403).json("Invalid extension and/or pdf required.");
     }
 
-    let sentence_total = parseInt(req.body.sentence, 10);
-    let filename = req.file.filename;
-    let filepath = "./uploads/" + filename;
-    let dataBuffer = fs.readFileSync(filepath);
+    let filename = req.file.originalname;
+    let dataBuffer = req.file.buffer;
+
     let videoKeyword = filename.split(".pdf")[0].replace(/[^a-zA-Z ]/g, " ");
 
     let ytVideos = await yts(videoKeyword);
@@ -266,12 +262,6 @@ app.post("/", verifyJWT, upload_pdf.single("pdf"), async (req, res) => {
                 split_sentence: split_sentence,
             };
         });
-
-        if (split_sentence_array.length < sentence_total) {
-            sentence_total = split_sentence_array.length;
-        } else {
-            sentence_total = sentence_total;
-        }
 
         let data_result = [];
         let language = lngDetector.detect(
@@ -305,7 +295,7 @@ app.post("/", verifyJWT, upload_pdf.single("pdf"), async (req, res) => {
             });
         }
 
-        return res.json(data_result);
+        return res.json(data_result)
         let json = JSON.stringify(data_result);
 
         let formData = {
