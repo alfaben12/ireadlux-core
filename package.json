@@ -1,0 +1,41 @@
+{
+  "name": "iread",
+  "version": "1.0.0",
+  "description": "iRead",
+  "main": "pdf2slide.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon pdf2slide.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alfaben12/iRead.git"
+  },
+  "author": "Thariq Alfa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alfaben12/iRead/issues"
+  },
+  "homepage": "https://github.com/alfaben12/iRead#readme",
+  "dependencies": {
+    "@touno-io/pdf": "^1.2.0",
+    "axios": "^0.19.2",
+    "bing-image-scraper": "0.0.1",
+    "compromise": "^13.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "g-i-s": "^2.1.5",
+    "google-images": "^2.1.0",
+    "jsonwebtoken": "^8.5.1",
+    "keyword-extractor": "0.0.19",
+    "languagedetect": "^2.0.0",
+    "multer": "^1.4.2",
+    "nalapa": "^1.11.0",
+    "natural": "^2.1.5",
+    "node-nlp": "^4.4.0",
+    "nodemon": "^2.0.3",
+    "random-words": "^1.1.1",
+    "yt-search": "^1.1.2"
+  }
+}
