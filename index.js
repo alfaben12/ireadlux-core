@@ -305,6 +305,7 @@ app.post("/", verifyJWT, upload_pdf.single("pdf"), async (req, res) => {
             });
         }
 
+        return res.json(data_result);
         let json = JSON.stringify(data_result);
 
         let formData = {
