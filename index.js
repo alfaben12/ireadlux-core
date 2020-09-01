@@ -300,7 +300,7 @@ app.post("/", verifyJWT, upload_pdf.single("pdf"), async (req, res) => {
       let split_sentence = split_sentence_array[i].split_sentence;
       let split = split_sentence[0].split(" or ")[0];
       let sentence_split = sentence.split(",");
-      let keywordImage = await getKeyword(split_sentence[0]);
+      let keywordImage = await getKeyword(sentence);
       let image = null;
       //  Extract the keywords
       var extraction_result = keyword_extractor.extract(keywordImage, {
@@ -310,7 +310,8 @@ app.post("/", verifyJWT, upload_pdf.single("pdf"), async (req, res) => {
         remove_duplicates: false,
       });
 
-      image = await img(split.split(",")[0]);
+      let final_keyword = extraction_result.join(" ");
+      image = await img(final_keyword);
 
       data_result.push({
         sentence: sentence,
@@ -319,7 +320,6 @@ app.post("/", verifyJWT, upload_pdf.single("pdf"), async (req, res) => {
         image: image,
         question: await get_question(sentence),
       });
-      console.log(i);
     }
 
     let json = JSON.stringify(data_result);
